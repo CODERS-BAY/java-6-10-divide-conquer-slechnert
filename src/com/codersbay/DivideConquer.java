@@ -1,12 +1,9 @@
 package com.codersbay;
 
+import java.util.Arrays;
+
 public class DivideConquer {
 
-    public static void main(String[] args) {
-        System.out.println("Divide and conquer");
-
-
-    }
 
     private static int[] split(int[] array) {
         int half = (array.length) / 2;
@@ -19,7 +16,7 @@ public class DivideConquer {
         //split
         int[] front = new int[half];
         int[] back;
-        //halbieren, ungerade anpassen
+
         if (array.length % 2 == 0) {
             back = new int[half];
         } else {
@@ -38,13 +35,53 @@ public class DivideConquer {
 
         int[] newArray = new int[array.length];
         newArray = merge(front, back);
+        return newArray;
 
     }
 
     private static int[] merge(int[] front, int[] back) {
 
+        int indexFront = 0;
+        int indexBack = 0;
+        int indexResult = 0;
+        int[] result = new int[front.length + back.length];
+
+        while (indexFront < front.length || indexBack < back.length) {
+
+            if (indexFront < front.length && indexBack < back.length) {
+
+                if (front[indexFront] < back[indexBack]) {
+                    indexResult++;
+                    indexFront++;
+                    result[indexResult] = front[indexFront];
+                } else {
+                    indexResult++;
+                    indexBack++;
+                    result[indexResult] = front[indexBack];
+                }
+            } else if (indexFront < front.length) {
+                indexResult++;
+                indexFront++;
+                result[indexResult] = front[indexFront];
+            } else if (indexBack < back.length) {
+                indexResult++;
+                indexFront++;
+                result[indexResult] = back[indexBack];
+            }
+        }
+        return result;
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println("Divide and conquer");
+        int[] numbers = new int[]{54, 26, 7, 1, 421, 5, 3241, 412, 21, 64};
+        System.out.println(Arrays.toString(numbers));
+
+        numbers = split(numbers);
+
+        System.out.println(Arrays.toString(numbers));
     }
 
 
 }
-
