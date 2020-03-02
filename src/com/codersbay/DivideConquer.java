@@ -1,87 +1,81 @@
 package com.codersbay;
 
 import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
 
 public class DivideConquer {
 
 
-    private static int[] split(int[] array) {
+    public static int findMax(int[] array) {
         int half = (array.length) / 2;
+        int maxFront;
+        int maxBack;
+        if (array.length >= 3) {
 
-        //zu klein, kein split
-        if (array.length < 3) {
-            return array;
-        }
+            int[] front = new int[half];
+            int[] back;
 
-        //split
-        int[] front = new int[half];
-        int[] back;
+            if (array.length % 2 == 0) {
+                back = new int[half];
+            } else {
+                back = new int[half + 1];
+            }
 
-        if (array.length % 2 == 0) {
-            back = new int[half];
+            for (int i = 0; i < front.length; i++) {
+                front[i] = array[i];
+            }
+            for (int j = 0; j < back.length; j++) {
+                back[j] = array[front.length + j];
+            }
+            maxFront = findMax(front);
+            maxBack = findMax(back);
+        } else if (array.length == 2) {
+            if (array[0] > array[1]) {
+                return array[0];
+            } else return array[1];
+        } else return array[0];
+
+        int max;
+        if (maxFront > maxBack) {
+            max = maxFront;
         } else {
-            back = new int[half + 1];
+            max = maxBack;
         }
-
-        for (int i = 0; i < front.length; i++) {
-            front[i] = array[i];
-        }
-        for (int j = 0; j < back.length; j++) {
-            back[j] = array[front.length + j];
-        }
-
-        front = split(front);
-        back = split(back);
-
-        int[] newArray = new int[array.length];
-        newArray = merge(front, back);
-        return newArray;
-
+        return max;
     }
 
-    private static int[] merge(int[] front, int[] back) {
 
-        int indexFront = 0;
-        int indexBack = 0;
-        int indexResult = 0;
-        int[] result = new int[front.length + back.length];
-
-        while (indexFront < front.length || indexBack < back.length) {
-
-            if (indexFront < front.length && indexBack < back.length) {
-
-                if (front[indexFront] < back[indexBack]) {
-                    indexResult++;
-                    indexFront++;
-                    result[indexResult] = front[indexFront];
-                } else {
-                    indexResult++;
-                    indexBack++;
-                    result[indexResult] = front[indexBack];
-                }
-            } else if (indexFront < front.length) {
-                indexResult++;
-                indexFront++;
-                result[indexResult] = front[indexFront];
-            } else if (indexBack < back.length) {
-                indexResult++;
-                indexFront++;
-                result[indexResult] = back[indexBack];
-            }
+    private static int[] randomArray(int length, int girth) {
+        int[] randomArray = new int[length];
+        int i = 0;
+        while (i < length) {
+            Random rando = new Random();
+            randomArray[i] = rando.nextInt(girth + 1);
+            ++i;
         }
-        return result;
+        return randomArray;
     }
 
 
     public static void main(String[] args) {
-        System.out.println("Divide and conquer");
-        int[] numbers = new int[]{54, 26, 7, 1, 421, 5, 3241, 412, 21, 64};
-        System.out.println(Arrays.toString(numbers));
 
-        numbers = split(numbers);
+        System.out.println("How long should the array be?");
+        Scanner sc = new Scanner(System.in);
+        int arrayLength = sc.nextInt();
 
-        System.out.println(Arrays.toString(numbers));
+        System.out.println("What should be the highest possible number?");
+        Scanner sc2 = new Scanner(System.in);
+        int highestRandom = sc2.nextInt();
+
+        int myArray[] = randomArray(arrayLength, highestRandom);
+
+        System.out.println(Arrays.toString(myArray));
+
+        System.out.println(findMax(myArray));
+
+
     }
 
-
 }
+
